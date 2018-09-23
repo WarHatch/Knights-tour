@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Knights_tour
 {
@@ -10,8 +10,17 @@ namespace Knights_tour
     {
         private static readonly Random getrandom = new Random();
 
-        static void Solve(Knight knight)
+        static void Solve(Knight knight, Stopwatch watch)
         {
+            //if (watch.IsRunning && knight.MoveLog.Count > 1000)
+            //{
+            //    watch.Stop();
+            //    Console.WriteLine("1000 moves took: " + (watch.ElapsedMilliseconds).ToString());
+            //    Console.ReadKey();
+            //}
+
+            string boardView = knight.Board.Print();
+            Console.WriteLine(boardView);
 
             var goodDestinations = knight.GoodDestinations();
             while (goodDestinations.Count > 0)
@@ -21,7 +30,17 @@ namespace Knights_tour
                 knight.MoveTo(randomCorrectDestination);
                 goodDestinations.RemoveAt(guessIndex);
 
-                Solve(knight);
+                Solve(knight, watch);
+                if (knight.Board.AllSpacesTaken())
+                    return;
+            }
+            try
+            {
+                knight.Backtrack();
+            }
+            catch (InvalidOperationException)
+            {
+                knight.MoveLog.Add("End of solving: No more moves available");
             }
             return;
         }
@@ -31,7 +50,9 @@ namespace Knights_tour
             var board = new Board(5, 5);
             var knight = new Knight(board, new Point(0, 0));
 
-            Solve(knight);
+            Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+
+            Solve(knight, watch);
         }
     }
 }

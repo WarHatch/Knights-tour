@@ -10,7 +10,9 @@ namespace Knights_tour
     {
         public readonly int xSize;
         public readonly int ySize;
-        public int[,] cells;
+        private int[,] cells;
+
+        public int[,] Cells { get => cells; }
 
         public Board(int xSize, int ySize)
         {
@@ -23,6 +25,13 @@ namespace Knights_tour
         {
             cells[newPosition.X, newPosition.Y] = value;
         }
+
+        public void Empty(Point newPosition)
+        {
+            cells[newPosition.X, newPosition.Y] = 0;
+        }
+
+        public bool FitsOnBoard(int x, int y) => (x > -1 && x < xSize && y > -1 && y < ySize);
 
         public bool AllSpacesTaken()
         {
@@ -37,17 +46,31 @@ namespace Knights_tour
             return true;
         }
 
-        public bool fitsOnBoard(int x, int y) => (x > -1 && x < xSize && y > -1 && y < ySize);
+        public string Print()
+        {
+            StringBuilder board = new StringBuilder(" Y");
 
-        //public string Print()
-        //{
-//            for (int x = 0; x<xSize; x++)
-//            {
-//                for (int y = 0; y<ySize; y++)
-//                {
-//                    if (cells[x, y] == 0)
-//                        return false;
-//                }
-        //}
+            for (int y = 0; y < ySize; y++)
+            {
+                board.AppendFormat("  {0}", y);
+            }
+            board.Append("\nX|");
+            for (int y = 0; y < ySize; y++)
+            {
+                board.Append("---");
+            }
+            board.AppendLine();
+
+            for (int x = 0; x < xSize; x++)
+            {
+                board.AppendFormat("{0}|", x);
+                for (int y = 0; y < ySize; y++)
+                {
+                    board.AppendFormat(cells[x, y].ToString().PadLeft(3));
+                }
+                board.AppendLine();
+            }
+            return board.ToString();
+        }
     }
 }
