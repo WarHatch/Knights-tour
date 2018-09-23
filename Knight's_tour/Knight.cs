@@ -36,18 +36,36 @@ namespace Knights_tour
             MoveLog.Add("Backtracking to move #" + moveStack.Count + " on " + moveStack.Peek());
         }
 
-        public List<Point> GoodDestinations()
+        public IEnumerable<Point> GoodDestinations()
         {
-            List<Point> goodDestinations = new List<Point>();
+            Dictionary<Point, int> goodDestinations = new Dictionary<Point, int>();
+
             for (int i = 0; i < manuevers.Length; i++)
             {
                 var potentialPos = CurrentPosition + manuevers[i];
                 if (Board.FitsOnBoard(potentialPos.X, potentialPos.Y))
                     if (Board.Cells[potentialPos.X, potentialPos.Y] == 0)
-                        goodDestinations.Add(potentialPos);
-                 
+                    {
+                        int priority = WarnsdorfsRuleMoves(potentialPos);
+                        goodDestinations.Add(potentialPos, priority);
+                    }
             }
-            return goodDestinations;
+            IEnumerable<Point> sortedDest = from dest in goodDestinations orderby dest.Value ascending select dest.Key;
+
+            return sortedDest;
+        }
+
+        private int WarnsdorfsRuleMoves(Point point)
+        {
+            int possibleMoves = 0;
+            for (int i = 0; i < manuevers.Length; i++)
+            {
+                var potentialPos = point + manuevers[i];
+                if (Board.FitsOnBoard(potentialPos.X, potentialPos.Y))
+                    if (Board.Cells[potentialPos.X, potentialPos.Y] == 0)
+                        possibleMoves++;
+            }
+            return possibleMoves;
         }
     }
 }

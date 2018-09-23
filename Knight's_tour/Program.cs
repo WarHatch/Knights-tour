@@ -8,29 +8,32 @@ namespace Knights_tour
 {
     class Program
     {
-        private static readonly Random getrandom = new Random();
-
         static void Solve(Knight knight, Stopwatch watch)
         {
-            //if (watch.IsRunning && knight.MoveLog.Count > 1000)
-            //{
-            //    watch.Stop();
-            //    Console.WriteLine("1000 moves took: " + (watch.ElapsedMilliseconds).ToString());
-            //    Console.ReadKey();
-            //}
+            // Benchmarking
+            if (watch.IsRunning && knight.MoveLog.Count > 1000)
+            {
+                watch.Stop();
+                Console.WriteLine("1000 moves took: " + (watch.ElapsedMilliseconds).ToString());
+                Console.ReadKey();
+            }
 
             string boardView = knight.Board.Print();
             Console.WriteLine(boardView);
 
-            var goodDestinations = knight.GoodDestinations();
+            List<Point> goodDestinations = knight.GoodDestinations().ToList();
             while (goodDestinations.Count > 0)
             {
-                int guessIndex = getrandom.Next(0, goodDestinations.Count);
-                var randomCorrectDestination = goodDestinations[guessIndex];
-                knight.MoveTo(randomCorrectDestination);
-                goodDestinations.RemoveAt(guessIndex);
+                // Manual Pop() of nextDestination
+                var nextDestination = goodDestinations.First<Point>();
+                goodDestinations.RemoveAt(0);
+                knight.MoveTo(nextDestination);
+
+                if (knight.Board.AllSpacesTaken())
+                    return;
 
                 Solve(knight, watch);
+
                 if (knight.Board.AllSpacesTaken())
                     return;
             }
@@ -50,9 +53,11 @@ namespace Knights_tour
             var board = new Board(5, 5);
             var knight = new Knight(board, new Point(0, 0));
 
-            Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
-
+            Stopwatch watch = Stopwatch.StartNew();
             Solve(knight, watch);
+            if (!knight.Board.AllSpacesTaken()) Console.WriteLine("[X] Unable to find a solution.");
+            else Console.WriteLine(knight.Board.Print());
+            Console.ReadKey();
         }
     }
 }
