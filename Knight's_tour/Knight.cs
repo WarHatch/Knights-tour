@@ -23,17 +23,24 @@ namespace Knights_tour
         public Board Board { get; }
         public List<string> MoveLog { get; } = new List<string>();
 
+        private string newLogMargin(int amount) => new string('-', moveStack.Count);
+
         public void MoveTo(Point newPosition)
         {
             moveStack.Push(newPosition);
             Board.PlaceOn(newPosition, moveStack.Count);
-            MoveLog.Add("Move #" + moveStack.Count + " to " + newPosition);
+
+            MoveLog.Add(newLogMargin(moveStack.Count)
+                + "Move #" + moveStack.Count + " to " + newPosition);
+            Console.WriteLine(MoveLog.Last());
         }
 
         public void Backtrack(){
             var falsePosition = moveStack.Pop();
             Board.Empty(falsePosition);
-            MoveLog.Add("Backtracking to move #" + moveStack.Count + " on " + moveStack.Peek());
+            MoveLog.Add(newLogMargin(moveStack.Count)
+                + "Backtracking to move #" + moveStack.Count + " on " + moveStack.Peek());
+            Console.WriteLine(MoveLog.Last());
         }
 
         public IEnumerable<Point> GoodDestinations()

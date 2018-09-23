@@ -10,16 +10,17 @@ namespace Knights_tour
     {
         static void Solve(Knight knight, Stopwatch watch)
         {
-            // Benchmarking
-            if (watch.IsRunning && knight.MoveLog.Count > 1000)
-            {
-                watch.Stop();
-                Console.WriteLine("1000 moves took: " + (watch.ElapsedMilliseconds).ToString());
-                Console.ReadKey();
-            }
+            //// Benchmarking
+            //if (watch.IsRunning && knight.MoveLog.Count > 1000)
+            //{
+            //    watch.Stop();
+            //    Console.WriteLine("1000 moves took: " + (watch.ElapsedMilliseconds).ToString());
+            //    Console.ReadKey();
+            //}
 
-            string boardView = knight.Board.Print();
-            Console.WriteLine(boardView);
+            //// Board printing
+            //string boardView = knight.Board.Print();
+            //Console.WriteLine(boardView);
 
             List<Point> goodDestinations = knight.GoodDestinations().ToList();
             while (goodDestinations.Count > 0)
@@ -50,7 +51,7 @@ namespace Knights_tour
 
         static void Main(string[] args)
         {
-            var board = new Board(5, 5);
+            var board = new Board(8, 8);
             var knight = new Knight(board, new Point(0, 0));
 
             Stopwatch watch = Stopwatch.StartNew();
