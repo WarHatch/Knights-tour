@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Knight_s_tour
+namespace Knights_tour
 {
     public struct Point
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Knight_s_tour
+namespace Knights_tour
 {
     public struct Board
     {
@@ -26,9 +26,9 @@ namespace Knight_s_tour
 
         public bool AllSpacesTaken()
         {
-            for (int x = 0; x < cells.Length; x++)
+            for (int x = 0; x < xSize; x++)
             {
-                for (int y = 0; y < cells.Length; y++)
+                for (int y = 0; y < ySize; y++)
                 {
                     if (cells[x, y] == 0)
                         return false;
@@ -37,6 +37,17 @@ namespace Knight_s_tour
             return true;
         }
 
-        public bool fitsOnBoard(int x, int y) => (x > -1 && x <= xSize && y > -1 && y <= ySize);
+        public bool fitsOnBoard(int x, int y) => (x > -1 && x < xSize && y > -1 && y < ySize);
+
+        //public string Print()
+        //{
+//            for (int x = 0; x<xSize; x++)
+//            {
+//                for (int y = 0; y<ySize; y++)
+//                {
+//                    if (cells[x, y] == 0)
+//                        return false;
+//                }
+        //}
     }
 }

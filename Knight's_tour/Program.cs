@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Knight_s_tour
+namespace Knights_tour
 {
     class Program
     {
@@ -28,7 +28,7 @@ namespace Knight_s_tour
 
         static void Main(string[] args)
         {
-            var board = new Board(4, 4);
+            var board = new Board(5, 5);
             var knight = new Knight(board, new Point(0, 0));
 
             Solve(knight);

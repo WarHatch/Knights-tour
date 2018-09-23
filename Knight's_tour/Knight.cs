@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Knight_s_tour
+namespace Knights_tour
 {
     class Knight
     {
@@ -35,10 +35,9 @@ namespace Knight_s_tour
             for (int i = 0; i < manuevers.Length; i++)
             {
                 var potentialPos = CurrentPosition + manuevers[i];
-                if (potentialPos.X > -1 && potentialPos.X <= board.xSize &&
-                    potentialPos.Y > -1 && potentialPos.Y <= board.ySize)
-                    if (board.cells[potentialPos.X, potentialPos.Y] != 0)
-                        goodDestinations.Add(goodDestinations[i]);
+                if (board.fitsOnBoard(potentialPos.X, potentialPos.Y))
+                    if (board.cells[potentialPos.X, potentialPos.Y] == 0)
+                        goodDestinations.Add(potentialPos);
                  
             }
             return goodDestinations;
