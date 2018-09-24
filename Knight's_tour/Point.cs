@@ -28,7 +28,7 @@ namespace Knights_tour
 
         public override string ToString()
         {
-            return ("[" + X + "," + Y + "]");
+            return ("[" + (X+1) + "," + (Y+1) + "]");
         }
 
         public int X { get; set; }

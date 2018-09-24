@@ -18,28 +18,28 @@ namespace Knights_tour
         {
             this.xSize = xSize;
             this.ySize = ySize;
-            this.cells = new int[xSize, ySize];
+            this.cells = new int[ySize, xSize];
         }
 
         public void PlaceOn(Point newPosition, int value)
         {
-            cells[newPosition.X, newPosition.Y] = value;
+            cells[newPosition.Y, newPosition.X] = value;
         }
 
         public void Empty(Point newPosition)
         {
-            cells[newPosition.X, newPosition.Y] = 0;
+            cells[newPosition.Y, newPosition.X] = 0;
         }
 
         public bool FitsOnBoard(int x, int y) => (x > -1 && x < xSize && y > -1 && y < ySize);
 
         public bool AllSpacesTaken()
         {
-            for (int x = 0; x < xSize; x++)
+            for (int y = 0; y < ySize; y++)
             {
-                for (int y = 0; y < ySize; y++)
+                for (int x = 0; x < xSize; x++)
                 {
-                    if (cells[x, y] == 0)
+                    if (cells[y, x] == 0)
                         return false;
                 }
             }
@@ -48,27 +48,29 @@ namespace Knights_tour
 
         public string Print()
         {
-            StringBuilder board = new StringBuilder(" Y");
+            StringBuilder board = new StringBuilder();
 
-            for (int y = 0; y < ySize; y++)
+            for (int y = ySize; y > 0; y--)
             {
-                board.AppendFormat("  {0}", y);
+                board.AppendFormat("{0}|", y);
+                for (int x = xSize; x > 0; x--)
+                {
+                    board.AppendFormat(cells[y-1, xSize-x].ToString().PadLeft(3));
+                }
+                board.AppendLine();
             }
-            board.Append("\nX|");
-            for (int y = 0; y < ySize; y++)
+
+            board.Append("Y|");
+            for (int x = 0; x < xSize; x++)
             {
                 board.Append("---");
             }
             board.AppendLine();
 
-            for (int x = 0; x < xSize; x++)
+            board.Append(" X");
+            for (int x = 1; x <= xSize; x++)
             {
-                board.AppendFormat("{0}|", x);
-                for (int y = 0; y < ySize; y++)
-                {
-                    board.AppendFormat(cells[x, y].ToString().PadLeft(3));
-                }
-                board.AppendLine();
+                board.AppendFormat("  {0}", x);
             }
             return board.ToString();
         }

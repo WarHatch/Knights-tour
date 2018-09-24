@@ -16,63 +16,84 @@ namespace Knights_tour
         {
             Board = board;
             moveStack = new Stack<Point>(board.xSize * board.ySize);
-            MoveTo(startingPosition);
+
+            //MoveTo
+            moveStack.Push(startingPosition);
+            Board.PlaceOn(startingPosition, moveStack.Count);
         }
 
         public Point CurrentPosition { get => moveStack.Peek(); }
         public Board Board { get; }
         public List<string> MoveLog { get; } = new List<string>();
 
-        private string newLogMargin(int amount) => new string('-', moveStack.Count);
+        private string NewLogMargin(int amount) => new string('-', moveStack.Count);
 
-        public void MoveTo(Point newPosition)
+        public void MoveTo(Point newPosition, int manueverIndex)
         {
+            string appendix = "Laisva. LENTA" + newPosition + ":=" + moveStack.Count;
+            MoveLog.Add(CreateLog(newPosition, manueverIndex, appendix));
+            Console.WriteLine(MoveLog.Last());
+
             moveStack.Push(newPosition);
             Board.PlaceOn(newPosition, moveStack.Count);
-
-            MoveLog.Add(MoveLog.Count + ")" + newLogMargin(moveStack.Count)
-                + "Move to " + newPosition);
-            Console.WriteLine(MoveLog.Last());
         }
 
         public void Backtrack(){
+            //MoveLog.Add(MoveLog.Count.ToString().PadRight(7) + NewLogMargin(moveStack.Count) +
+            //    "L= " + (moveStack.Count) + " nebeturi tolesniu zingsniu. Backtrack.");
+            Console.WriteLine("".PadRight(7) + NewLogMargin(moveStack.Count) +
+                "L= " + (moveStack.Count) + " nebeturi tolesniu zingsniu. Backtrack.");
+
             var falsePosition = moveStack.Pop();
             Board.Empty(falsePosition);
-            MoveLog.Add(MoveLog.Count + ")" + newLogMargin(moveStack.Count)
-                + "Backtracking to " + moveStack.Peek());
-            Console.WriteLine(MoveLog.Last());
         }
 
-        public IEnumerable<Point> GoodDestinations()
+        private string CreateLog(Point newPosition, int manueverIndex, string appendix)
         {
-            Dictionary<Point, int> goodDestinations = new Dictionary<Point, int>();
+            return MoveLog.Count.ToString().PadRight(7)
+                + NewLogMargin(moveStack.Count) + "R" + (manueverIndex+1) + ". "
+                + newPosition + ". L= " + moveStack.Count  + ". "
+                + appendix;
+        }
 
-            for (int i = 0; i < manuevers.Length; i++)
+        public Dictionary<int, Point> GoodDestinations()
+        {
+            Dictionary<int, Point> goodDestinations = new Dictionary<int, Point>();
+
+            for (int manueverIndex = 0; manueverIndex < manuevers.Length; manueverIndex++)
             {
-                var potentialPos = CurrentPosition + manuevers[i];
+                var potentialPos = CurrentPosition + manuevers[manueverIndex];
                 if (Board.FitsOnBoard(potentialPos.X, potentialPos.Y))
-                    if (Board.Cells[potentialPos.X, potentialPos.Y] == 0)
+                {
+                    if (Board.Cells[potentialPos.Y, potentialPos.X] == 0)
                     {
-                        int priority = WarnsdorfsRuleMoves(potentialPos);
-                        goodDestinations.Add(potentialPos, priority);
+                        //int priority = WarnsdorfsRuleMoves(potentialPos);
+                        //goodDestinations.Add(potentialPos, priority);
+                        goodDestinations.Add(manueverIndex, potentialPos);
                     }
+                    else
+                    {
+                        FakeMove(potentialPos, manueverIndex, "Siulas.");
+                    }
+                }
+                else
+                {
+                    FakeMove(potentialPos, manueverIndex, "Uz krasto.");
+                }
             }
-            IEnumerable<Point> sortedDest = from dest in goodDestinations orderby dest.Value ascending select dest.Key;
 
-            return sortedDest;
+            return goodDestinations;
         }
 
-        private int WarnsdorfsRuleMoves(Point point)
+        private void FakeMove(Point newPosition, int manueverIndex, string logAppendix)
         {
-            int possibleMoves = 0;
-            for (int i = 0; i < manuevers.Length; i++)
-            {
-                var potentialPos = point + manuevers[i];
-                if (Board.FitsOnBoard(potentialPos.X, potentialPos.Y))
-                    if (Board.Cells[potentialPos.X, potentialPos.Y] == 0)
-                        possibleMoves++;
-            }
-            return possibleMoves;
+            MoveLog.Add(
+                MoveLog.Count.ToString().PadRight(7)
+                + NewLogMargin(moveStack.Count) + "R" + (manueverIndex + 1) + ". "
+                + newPosition.ToString() + ". L= " + moveStack.Count + ". "
+                + logAppendix
+            );
+            Console.WriteLine(MoveLog.Last());
         }
     }
 }

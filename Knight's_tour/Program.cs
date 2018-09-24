@@ -24,16 +24,19 @@ namespace Knights_tour
             //string boardView = knight.Board.Print();
             //Console.WriteLine(boardView);
 
-            List<Point> goodDestinations = knight.GoodDestinations().ToList();
+            Dictionary<int, Point> goodDestinations = knight.GoodDestinations();
             while (goodDestinations.Count > 0)
             {
                 // Manual Pop() of nextDestination
-                //var nextDestination = goodDestinations.First<Point>();
-                //goodDestinations.RemoveAt(0);
-                var chosenPath = rnd.Next(0, goodDestinations.Count);
-                var nextDestination = goodDestinations.ElementAt<Point>(chosenPath);
-                goodDestinations.RemoveAt(chosenPath);
-                knight.MoveTo(nextDestination);
+                var nextDestination = goodDestinations.First();
+                goodDestinations.Remove(nextDestination.Key);
+
+                // Random nextDestination
+                //var chosenPath = rnd.Next(0, goodDestinations.Count);
+                //var nextDestination = goodDestinations.ElementAt<Point>(chosenPath);
+                //goodDestinations.RemoveAt(chosenPath);
+
+                knight.MoveTo(nextDestination.Value, nextDestination.Key);
 
                 if (knight.Board.AllSpacesTaken())
                     return;
@@ -49,14 +52,15 @@ namespace Knights_tour
             }
             catch (InvalidOperationException)
             {
-                knight.MoveLog.Add("End of solving: No more moves available");
+                knight.MoveLog.Add("InvalidOperationException: Possibility that no more moves are available");
+                Console.WriteLine(knight.MoveLog.Last());
             }
             return;
         }
 
         static void Main(string[] args)
         {
-            var board = new Board(7, 7);
+            var board = new Board(5, 5);
             var knight = new Knight(board, new Point(0, 0));
 
             Stopwatch watch = Stopwatch.StartNew();
