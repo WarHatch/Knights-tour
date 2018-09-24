@@ -8,13 +8,15 @@ namespace Knights_tour
 {
     class Program
     {
+        static Random rnd = new Random();
+
         static void Solve(Knight knight, Stopwatch watch)
         {
             //// Benchmarking
-            //if (watch.IsRunning && knight.MoveLog.Count > 1000)
+            //if (watch.IsRunning && knight.MoveLog.Count > 100000)
             //{
             //    watch.Stop();
-            //    Console.WriteLine("1000 moves took: " + (watch.ElapsedMilliseconds).ToString());
+            //    Console.WriteLine("100000 moves took: " + (watch.ElapsedMilliseconds).ToString());
             //    Console.ReadKey();
             //}
 
@@ -26,8 +28,11 @@ namespace Knights_tour
             while (goodDestinations.Count > 0)
             {
                 // Manual Pop() of nextDestination
-                var nextDestination = goodDestinations.First<Point>();
-                goodDestinations.RemoveAt(0);
+                //var nextDestination = goodDestinations.First<Point>();
+                //goodDestinations.RemoveAt(0);
+                var chosenPath = rnd.Next(0, goodDestinations.Count);
+                var nextDestination = goodDestinations.ElementAt<Point>(chosenPath);
+                goodDestinations.RemoveAt(chosenPath);
                 knight.MoveTo(nextDestination);
 
                 if (knight.Board.AllSpacesTaken())
@@ -51,7 +56,7 @@ namespace Knights_tour
 
         static void Main(string[] args)
         {
-            var board = new Board(8, 8);
+            var board = new Board(7, 7);
             var knight = new Knight(board, new Point(0, 0));
 
             Stopwatch watch = Stopwatch.StartNew();

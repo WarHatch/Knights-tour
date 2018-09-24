@@ -30,16 +30,16 @@ namespace Knights_tour
             moveStack.Push(newPosition);
             Board.PlaceOn(newPosition, moveStack.Count);
 
-            MoveLog.Add(newLogMargin(moveStack.Count)
-                + "Move #" + moveStack.Count + " to " + newPosition);
+            MoveLog.Add(MoveLog.Count + ")" + newLogMargin(moveStack.Count)
+                + "Move to " + newPosition);
             Console.WriteLine(MoveLog.Last());
         }
 
         public void Backtrack(){
             var falsePosition = moveStack.Pop();
             Board.Empty(falsePosition);
-            MoveLog.Add(newLogMargin(moveStack.Count)
-                + "Backtracking to move #" + moveStack.Count + " on " + moveStack.Peek());
+            MoveLog.Add(MoveLog.Count + ")" + newLogMargin(moveStack.Count)
+                + "Backtracking to " + moveStack.Peek());
             Console.WriteLine(MoveLog.Last());
         }
 

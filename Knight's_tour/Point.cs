@@ -26,6 +26,11 @@ namespace Knights_tour
             return new Point(a.X + b.X, a.Y + b.Y);
         }
 
+        public override string ToString()
+        {
+            return ("[" + X + "," + Y + "]");
+        }
+
         public int X { get; set; }
         public int Y { get; set; }
     }
