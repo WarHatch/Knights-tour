@@ -28,20 +28,24 @@ namespace Knights_tour
 
         private string NewLogMargin(int amount) => new string('-', moveStack.Count);
 
-        public void MoveTo(Point newPosition, int manueverIndex)
+        public void MoveTo(Point newPosition, int manueverIndex, StringBuilder stringBuilder)
         {
             string appendix = "Laisva. LENTA" + newPosition + ":=" + moveStack.Count;
             MoveLog.Add(CreateLog(newPosition, manueverIndex, appendix));
-            Console.WriteLine(MoveLog.Last());
+            //Console.WriteLine(MoveLog.Last());
+            stringBuilder.AppendLine(MoveLog.Last());
 
             moveStack.Push(newPosition);
             Board.PlaceOn(newPosition, moveStack.Count);
         }
 
-        public void Backtrack(){
+        public void Backtrack(StringBuilder stringBuilder)
+        {
             //MoveLog.Add(MoveLog.Count.ToString().PadRight(7) + NewLogMargin(moveStack.Count) +
             //    "L= " + (moveStack.Count) + " nebeturi tolesniu zingsniu. Backtrack.");
-            Console.WriteLine("".PadRight(7) + NewLogMargin(moveStack.Count) +
+            //Console.WriteLine("".PadRight(7) + NewLogMargin(moveStack.Count) +
+            //    "L= " + (moveStack.Count) + " nebeturi tolesniu zingsniu. Backtrack.");
+            stringBuilder.AppendLine("".PadRight(7) + NewLogMargin(moveStack.Count) +
                 "L= " + (moveStack.Count) + " nebeturi tolesniu zingsniu. Backtrack.");
 
             var falsePosition = moveStack.Pop();
@@ -56,7 +60,7 @@ namespace Knights_tour
                 + appendix;
         }
 
-        public Dictionary<int, Point> GoodDestinations()
+        public Dictionary<int, Point> GoodDestinations(StringBuilder stringBuilder)
         {
             Dictionary<int, Point> goodDestinations = new Dictionary<int, Point>();
 
@@ -73,19 +77,19 @@ namespace Knights_tour
                     }
                     else
                     {
-                        FakeMove(potentialPos, manueverIndex, "Siulas.");
+                        FakeMove(potentialPos, manueverIndex, "Siulas.", stringBuilder);
                     }
                 }
                 else
                 {
-                    FakeMove(potentialPos, manueverIndex, "Uz krasto.");
+                    FakeMove(potentialPos, manueverIndex, "Uz krasto.", stringBuilder);
                 }
             }
 
             return goodDestinations;
         }
 
-        private void FakeMove(Point newPosition, int manueverIndex, string logAppendix)
+        private void FakeMove(Point newPosition, int manueverIndex, string logAppendix, StringBuilder stringBuilder)
         {
             MoveLog.Add(
                 MoveLog.Count.ToString().PadRight(7)
@@ -93,7 +97,8 @@ namespace Knights_tour
                 + newPosition.ToString() + ". L= " + moveStack.Count + ". "
                 + logAppendix
             );
-            Console.WriteLine(MoveLog.Last());
+            //Console.WriteLine(MoveLog.Last());
+            stringBuilder.AppendLine(MoveLog.Last());
         }
     }
 }
